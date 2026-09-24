@@ -267,7 +267,7 @@ async function confirmBooking(){
     return;
   }
 
-  const msg = 'Olá! Gostaria de confirmar meu agendamento na '+(stateData.shopName||'Barbearia')+'.\nDia: '+day.fullLabel+'\nHorário: '+selectedSlot+'\nNome: '+name;
+  const msg = 'Olá! Passando para confirmar o agendamento do meu corte. 💈\n📅 Dia: '+day.fullLabel+'\n🕒 Horário: '+selectedSlot+'\n👤 Nome: '+name;
   const barberPhone = (stateData.barberPhone || '').trim();
   const url = barberPhone
     ? 'https://wa.me/'+barberPhone+'?text='+encodeURIComponent(msg)
