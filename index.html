@@ -267,9 +267,13 @@ async function confirmBooking(){
   const day = stateData.days[activeDayIndex];
   const res = await apiPost({ action:'book', date: day.date, time: selectedSlot, name, phone });
   if(!res.ok){
-    err.textContent = res.error || 'Não foi possível confirmar. Tente outro horário.';
-    err.style.display='block';
+    const dayIndexBefore = activeDayIndex;
     await loadState();
+    if(dayIndexBefore < stateData.days.length) activeDayIndex = dayIndexBefore;
+    renderTabs();
+    renderSlots();
+    err.textContent = res.error || 'Não foi possível confirmar. Tente outro horário.';
+    err.style.display = 'block';
     return;
   }
 
