@@ -37,8 +37,8 @@
   }
   input::placeholder{color:var(--text-dim);}
   label{font-size:13px; color:var(--text-dim); display:block; margin:0 0 4px;}
-  .tabs{display:flex; gap:8px; margin-bottom:16px;}
-  .tab{flex:1; padding:9px 0; border-radius:999px; border:1px solid rgba(255,255,255,.08); background:var(--card-2); color:var(--text-dim); font-size:13px; font-weight:500; cursor:pointer; text-align:center;}
+  .tabs{display:flex; gap:8px; margin-bottom:16px; overflow-x:auto;}
+  .tab{flex:0 0 auto; min-width:60px; padding:9px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.08); background:var(--card-2); color:var(--text-dim); font-size:13px; font-weight:500; cursor:pointer; text-align:center; white-space:nowrap;}
   .tab.active{background:var(--gold); color:#201804; border-color:var(--gold);}
   .slots{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px;}
   .slot{padding:11px 0; border-radius:9px; border:1px solid rgba(255,255,255,.08); background:var(--card-2); color:var(--text); font-size:13px; font-family:inherit; cursor:pointer; text-align:center;}
