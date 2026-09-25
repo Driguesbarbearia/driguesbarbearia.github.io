@@ -153,6 +153,12 @@
       <p style="font-size:12px;color:var(--text-dim);margin:0 0 10px">Só vira horário reservável se estiver dentro do intervalo entre o horário inicial e o final — se quiser oferecer 20h-22h com taxa extra, o horário final também precisa ir até 22:00.</p>
       <p id="cfgError" class="error"></p>
       <button class="primary" onclick="saveConfig()">Salvar configurações</button>
+
+      <h2 style="margin-top:16px">Bloquear um dia específico</h2>
+      <label>Data (ex: compromisso, folga, feriado)</label>
+      <input id="blockDateInput" type="date">
+      <button class="primary" onclick="blockDay()" style="margin-bottom:14px">Bloquear esse dia</button>
+      <div id="blockedDaysList"></div>
     </div>
 
     <div class="card" id="adminTab-password" style="display:none">
@@ -317,6 +323,47 @@ async function loadConfigIntoForm(){
   document.getElementById('cfgEnd').value = res.endTime;
   document.getElementById('cfgInterval').value = String(res.intervalMin);
   document.getElementById('cfgExtraFrom').value = res.extraFrom;
+  renderBlockedDays(res.blockedDays || []);
+}
+
+function renderBlockedDays(list){
+  const wrap = document.getElementById('blockedDaysList');
+  wrap.innerHTML = '';
+  if(!list.length){
+    wrap.innerHTML = '<p style="font-size:13px;color:var(--text-dim);margin:6px 0 0">Nenhum dia bloqueado no momento.</p>';
+    return;
+  }
+  list.forEach(d=>{
+    const row = document.createElement('div');
+    row.className = 'admin-row';
+    const span = document.createElement('span');
+    span.className = 'admin-info';
+    span.textContent = d;
+    row.appendChild(span);
+    const btn = document.createElement('button');
+    btn.className = 'release-btn';
+    btn.textContent = 'desbloquear';
+    btn.onclick = ()=> unblockDay(d);
+    row.appendChild(btn);
+    wrap.appendChild(row);
+  });
+}
+
+async function blockDay(){
+  const date = document.getElementById('blockDateInput').value;
+  if(!date){ alert('Escolha uma data.'); return; }
+  const res = await apiPost({ action:'blockDay', password: adminPassword, date });
+  if(!res.ok){ alert(res.error || 'Não foi possível bloquear.'); return; }
+  document.getElementById('blockDateInput').value = '';
+  loadConfigIntoForm();
+  loadState();
+}
+
+async function unblockDay(date){
+  const res = await apiPost({ action:'unblockDay', password: adminPassword, date });
+  if(!res.ok){ alert(res.error || 'Não foi possível desbloquear.'); return; }
+  loadConfigIntoForm();
+  loadState();
 }
 
 async function saveConfig(){
